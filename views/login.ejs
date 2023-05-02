@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>davX.com</title>
+    <link rel="StyleSheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/validation.js"></script>
+    <script>
+    $(function(){
+        $("form[name='login']").validate({
+            submitHandler: function(e) {
+                var name = $("#username").val();  
+	            var pass = $("#password").val();
+                var ema = $("#emailid").val();
+                $.ajax({
+                    url:'/check_login',     
+		            method:'post',  
+		            cache:false,
+                    dataType:'json',  
+                    data:{'uid':name,'pass':pass, 'email':ema},
+                    success:function(result){
+                        if(result.msg=="1")
+                        {
+				            $("#valid").html("Account does not exist.");
+			            }
+			            else
+			            {
+			             	window.location.href="/inbox";
+			            }
+                    },  
+                    error:function(response){  
+                        alert('Server Error!')  
+                    }  
+                });  
+            }
+        });
+    });
+    </script>
+</head>
+<body>
+    <div class="login-form">
+        <h2>Login</h2>
+        <form name="login" method="post" action="/check_login" onsubmit="return false">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Username" id="username" required="required">
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Password" id="password" required="required">
+          </div>
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="Email" id="emailid" required="required">
+          </div>
+          <button type="submit" class="btn btn-success btn-lg">Login</button>
+          <div id="valid" class="text-center"></div>
+        </form>
+        <!-- <div class="login-links">
+          <a href="#">Forgot Password?</a> or <a href="#">Sign Up</a>
+        </div> -->
+    </div> 
+</body>
+</html>
